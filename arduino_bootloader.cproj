@@ -141,12 +141,6 @@
     <Compile Include="FPS\fps.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="FPS_temp\fps.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="FPS_temp\fps.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="I2C\i2c.c">
       <SubType>compile</SubType>
     </Compile>
@@ -173,7 +167,6 @@
     <Folder Include="I2C" />
     <Folder Include="LCD" />
     <Folder Include="FPS" />
-    <Folder Include="FPS_temp" />
     <Folder Include="UART" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />

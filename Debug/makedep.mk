@@ -4,8 +4,6 @@
 
 FPS\fps.c
 
-FPS_temp\fps.c
-
 I2C\i2c.c
 
 LCD\lcd.c

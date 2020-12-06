@@ -1,13 +1,9 @@
 #include "lcd.h"
 #include <util/delay.h>
 
+uint8_t led_pin;
 
-
-	uint8_t led_pin;
-
-
-
-void putnibble(char t){
+void header_transmit(char t){
 	t <<= 4;
 	i2c_send_packet(led_pin |= 0x04, SLA_WRITE_ADDR);
 	_delay_us(50);
@@ -20,35 +16,35 @@ void lcd_send_byte(char c){
 	char highc = 0;
 	highc = c >> 4;
 	i2c_send_packet(led_pin &=~ 0x01, SLA_WRITE_ADDR); 
-	putnibble(highc);
-	putnibble(c);
+	header_transmit(highc);
+	header_transmit(c);
 }
 
 void lcd_send_char(char c){
 	char highc = 0;
 	highc = c >> 4;
 	i2c_send_packet (led_pin |= 0x01, SLA_WRITE_ADDR);
-	putnibble(highc);
-	putnibble(c);
+	header_transmit(highc);
+	header_transmit(c);
 }
 
 void lcd_init(){
 	led_pin = 0;
 	i2c_init();
 	_delay_ms(15);
-	putnibble(0b00000011);					//Enter 4bit mode
+	header_transmit(0b00000011);	//Enter 4bit mode
 	_delay_ms(4);
-	putnibble(0b00000011);					
+	header_transmit(0b00000011);					
 	_delay_us(100);							
-	putnibble(0b00000011);					
+	header_transmit(0b00000011);					
 	_delay_ms(1);
-	putnibble(0b00000010);
+	header_transmit(0b00000010);
 	_delay_ms(1);			
-	lcd_send_byte(0x28);		//Select 16x2 LCD in 4Bit mode
+	lcd_send_byte(0x28);			//Select 16x2 LCD in 4Bit mode
 	_delay_ms(1);	
-	lcd_send_byte(0x0C);		//Display ON Cursor off
+	lcd_send_byte(0x0C);			//Display ON Cursor off
 	_delay_ms(1);
-	lcd_send_byte(0x06);		//Cursor auto increment
+	lcd_send_byte(0x06);			//Cursor auto increment
 	_delay_ms(1);
 	i2c_send_packet(led_pin |= 0x08, SLA_WRITE_ADDR);	
 	i2c_send_packet(led_pin &=~ 0x02, SLA_WRITE_ADDR);
