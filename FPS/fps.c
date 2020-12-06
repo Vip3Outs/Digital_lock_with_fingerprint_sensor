@@ -14,6 +14,7 @@
   uint32_t device_addr = 0xFFFFFFFF; //The device address (set by getParameters)
   uint16_t packet_len = 64; //The max packet length (set by getParameters)
   uint16_t baud_rate = 57600; //The UART baud rate (set by getParameters)
+  
 /*!
  * @brief Gets the command packet
  */

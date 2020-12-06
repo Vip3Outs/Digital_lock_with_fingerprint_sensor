@@ -36,12 +36,14 @@ SUBDIRS :=  \
 ../I2C \
 ../LCD \
 ../FPS \
+../FPS_temp \
 ../UART
 
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
 ../FPS/fps.c \
+../FPS_temp/fps.c \
 ../I2C/i2c.c \
 ../LCD/lcd.c \
 ../main.c \
@@ -56,6 +58,7 @@ ASM_SRCS +=
 
 OBJS +=  \
 FPS/fps.o \
+FPS_temp/fps.o \
 I2C/i2c.o \
 LCD/lcd.o \
 main.o \
@@ -63,6 +66,7 @@ UART/uart.o
 
 OBJS_AS_ARGS +=  \
 FPS/fps.o \
+FPS_temp/fps.o \
 I2C/i2c.o \
 LCD/lcd.o \
 main.o \
@@ -70,6 +74,7 @@ UART/uart.o
 
 C_DEPS +=  \
 FPS/fps.d \
+FPS_temp/fps.d \
 I2C/i2c.d \
 LCD/lcd.d \
 main.d \
@@ -77,6 +82,7 @@ UART/uart.d
 
 C_DEPS_AS_ARGS +=  \
 FPS/fps.d \
+FPS_temp/fps.d \
 I2C/i2c.d \
 LCD/lcd.d \
 main.d \
@@ -97,6 +103,13 @@ LINKER_SCRIPT_DEP+=
 
 # AVR32/GNU C Compiler
 FPS/fps.o: ../FPS/fps.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)D:\Atmel Studio 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel Studio 7.0\7.0\Packs\atmel\ATmega_DFP\1.3.300\include" -I"../I2C_module" -I"../LCD"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328p -B "D:\Atmel Studio 7.0\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega328p" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+FPS_temp/fps.o: ../FPS_temp/fps.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)D:\Atmel Studio 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel Studio 7.0\7.0\Packs\atmel\ATmega_DFP\1.3.300\include" -I"../I2C_module" -I"../LCD"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328p -B "D:\Atmel Studio 7.0\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega328p" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

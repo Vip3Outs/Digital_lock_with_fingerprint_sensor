@@ -10,7 +10,6 @@
 #define F_CPU			16000000
 #define _BAUD			57600					    // Baud rate
 #define _UBRR			(F_CPU/16)/_BAUD - 1		// Used for UBRRL and UBRRH
-
 #define RX_BUFF			10
 
 /* Useful macros */

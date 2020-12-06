@@ -3,8 +3,7 @@
 
 
 /*! \brief Configures baud rate (refer data sheet) */
-void initUART(void)
-{
+void initUART(void){
 	// Not necessary; initialize anyway
 	DDRD |= (1 << PD1);
 	DDRD &= ~ (1 << PD0);
@@ -25,8 +24,7 @@ void initUART(void)
  * 	Use this function if the RX interrupt is not enabled.
  * 	Returns 0 on empty buffer
  */
-uint8_t getByte(void)
-{
+uint8_t getByte(void){
 	// Check to see if something was received
 	while (!(UCSR0A & (1 << RXC0)));
 	return (uint8_t) UDR0;
@@ -37,35 +35,28 @@ uint8_t getByte(void)
  * 	Use this function if the TX interrupt is not enabled.
  * 	Blocks the serial port while TX completes
  */
-void putByte(unsigned char data)
-{
+void putByte(unsigned char data){
 	// Stay here until data buffer is empty
 	while (!(UCSR0A & (1 << UDRE0)));
-	UDR0 = (unsigned char) data;
-
+	UDR0 = data;
 }
 
 /*! \brief Writes an ASCII string to the TX buffer */
-void writeString(char *str)
-{
-	while (*str != '\0')
-	{
+void writeString(char *str){
+	while (*str != '\0'){
 		putByte(*str);
 		++str;
 	}
 }
 
-const char* readString(void)
-{
+const char* readString(void){
 	static char rxstr[RX_BUFF];
 	static char* temp;
 	temp = rxstr;
 
-	while((*temp = getByte()) != '\n')
-	{
+	while((*temp = getByte()) != '\n'){
 		++temp;
 	}
-
 	return rxstr;
 }
 

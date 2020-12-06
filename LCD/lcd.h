@@ -2,12 +2,8 @@
 #define __LCD_H__
 
 
-#define LED_PIN 0
-
 #define I2C_ADDR 0x3F
 #define SLA_WRITE_ADDR I2C_ADDR << 1
-//#define LCD_COMMAND 0
-//#define LCD_DATA 1
 
 
 /*
