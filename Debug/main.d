@@ -16,9 +16,7 @@ main.d main.o: .././main.c \
  d:\atmel\ studio\ 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h \
  d:\atmel\ studio\ 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
  d:\atmel\ studio\ 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
- .././UART/uart.h \
- d:\atmel\ studio\ 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h \
- .././I2C/i2c.h .././LCD/lcd.h .././FPS/fps.h
+ .././UART/uart.h .././I2C/i2c.h .././LCD/lcd.h .././FPS/fps.h
 
 d:\atmel\ studio\ 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -55,8 +53,6 @@ d:\atmel\ studio\ 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\del
 d:\atmel\ studio\ 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h:
 
 .././UART/uart.h:
-
-d:\atmel\ studio\ 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h:
 
 .././I2C/i2c.h:
 
