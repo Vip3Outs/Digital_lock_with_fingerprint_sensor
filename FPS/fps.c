@@ -1,5 +1,5 @@
 #include "fps.h"
-
+uint8_t tmp[3];
 void fps_transmit_header(){
 	//starting code
 	putByte(0xEF);
@@ -13,48 +13,33 @@ void fps_transmit_header(){
 	putByte(0x01);
 }
 
-uint16_t fps_confirmation(uint8_t instruction_code){
-	uint16_t tmp;
+void fps_confirmation(uint8_t instruction_code){
+
 	for(int i = 0; i<9; ++i){
 		getByte();
 	}
 	//confirmation code
-	tmp = getByte();
-	if(tmp == 0x00 && instruction_code == 0x1D){
-		tmp = getByte() << 8;
-		tmp += getByte();
+	tmp[0] = getByte();
+	if(instruction_code == 0x1D){
+		tmp[1] = getByte();
+		tmp[2] = getByte();
 	}
-	else if(!(tmp == 0x00) && instruction_code == 0x1D){
-		tmp = 0xFFFF;
-		getByte();
-		getByte();
-	}
-	if(tmp == 0x00 && instruction_code == 0x04){
+	if(instruction_code == 0x04){
 		//page_ID
 		getByte();
 		getByte();
 		//MatchScore
-		tmp = getByte() << 8;
-		tmp += getByte();
-	}
-	else if(!(tmp == 0x00) && instruction_code == 0x04){
-		tmp = 0xFFFF;
-		//page_ID
-		getByte();
-		getByte();
-		//MatchScore
-		getByte();
-		getByte();
+		tmp[1] = getByte();
+		tmp[2] = getByte();
 	}
 	//checksum
 	getByte();
 	getByte();
-	return tmp;
 }
 
 
 
-uint8_t fps_read_finger(){
+void fps_read_finger(){
 	//header
 	fps_transmit_header();
 	//length
@@ -66,10 +51,10 @@ uint8_t fps_read_finger(){
 	putByte(0x00);
 	putByte(0x05);
 	
-	return fps_confirmation(0x01);
+	fps_confirmation(0x01);
 }
 
-uint8_t fps_img2TZ(unsigned char buffer){
+void fps_img2TZ(unsigned char buffer){
 	//header
 	fps_transmit_header();
 	//length
@@ -82,10 +67,10 @@ uint8_t fps_img2TZ(unsigned char buffer){
 	putByte(buffer & 0xFF00);
 	putByte(buffer & 0x00FF);
 		
-	return fps_confirmation(0x02);
+	fps_confirmation(0x02);
 }
 
-uint16_t fps_search(){
+void fps_search(){
 	//header
 	fps_transmit_header();
 	//length
@@ -105,10 +90,10 @@ uint16_t fps_search(){
 	putByte(0x01);
 	putByte(0x0E);
 
-	return fps_confirmation(0x04);
+	fps_confirmation(0x04);
 }
 
-uint8_t fps_genModel(){
+void fps_genModel(){
 	//header
 	fps_transmit_header();
 	//length
@@ -120,10 +105,10 @@ uint8_t fps_genModel(){
 	putByte(0x00);
 	putByte(0x09);
 	
-	return fps_confirmation(0x05);
+	fps_confirmation(0x05);
 }
 
-uint8_t fps_storeModel(uint16_t storeID){
+void fps_storeModel(uint16_t storeID){
 	//header
 	fps_transmit_header();
 	//length
@@ -141,10 +126,10 @@ uint8_t fps_storeModel(uint16_t storeID){
 	putByte(storeID & 0xFF00);
 	putByte(storeID & 0x00FF);
 	
-	return fps_confirmation(0x06);
+	fps_confirmation(0x06);
 }
 
-uint8_t fps_deleteModel(uint16_t deleteID){
+void fps_deleteModel(uint16_t deleteID){
 	//header
 	fps_transmit_header();
 	//length
@@ -163,5 +148,5 @@ uint8_t fps_deleteModel(uint16_t deleteID){
 	putByte(deleteID & 0xFF00);
 	putByte(deleteID & 0x00FF);
 	
-	return fps_confirmation(0x0c);
+	fps_confirmation(0x0c);
 }

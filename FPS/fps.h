@@ -3,8 +3,13 @@
 #include <stdint.h>
 
 void fps_transmit_header();
-uint16_t fps_confirmation(uint8_t instruction_code);
-uint8_t fps_read_finger();
+void fps_confirmation(uint8_t instruction_code);
+void fps_read_finger();
+void fps_img2TZ(unsigned char buffer);
+void fps_search();
+void fps_genModel();
+void fps_storeModel(uint16_t storeID);
+void fps_deleteModel(uint16_t deleteID);
 
 
 
