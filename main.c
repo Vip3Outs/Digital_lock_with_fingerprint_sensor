@@ -2,6 +2,7 @@
 #define BAUD 57600
 #define MyUBRR F_CPU/16/BAUD-1
 #include <avr/io.h>
+#include <avr/sfr_defs.h>
 #include <stdio.h>
 #include <util/delay.h>
 #include <stdbool.h>
@@ -10,18 +11,20 @@
 #include "LCD/lcd.h"
 #include "FPS/fps.h"
 
-void newFinger(uint16_t id);
-void deleteFinger(uint16_t id);
 void checkFinger();
-uint16_t getID();
+void newFinger(uint8_t id);
+void deleteFinger(uint8_t id);
+uint8_t getID();
+uint16_t getTemplateCount();
 
-bool scanFinger = false, enrollFinger = false, removeFinger = false, doorLocked = true;
-uint16_t id;
+bool scanFinger = false, enrollFinger = false, removeFinger = false, doorLocked = true, mainUser = false, getID_bool = false;
+uint8_t id;
 uint8_t proby = 0;
-uint8_t tmp [3];
+uint16_t mainUserID = 1;
+uint8_t tmp[5];
 int main(void){
 	/*
-	*Wst?pne parametry programu
+	*Wstepne parametry programu
 	*/
 
 	lcd_init();
@@ -36,39 +39,45 @@ int main(void){
 	_delay_ms(2000);
 	lcd_clear();
 	lcd_setCursor(0,0);
+	lcd_send_string(" Drzwi zamkniete");
+	
 
 				
 	while(1)
 	{
 		if(doorLocked){
-			if(PORTB1 == 0 && !(scanFinger)){
+			if(bit_is_clear(PINB, 3) && !(scanFinger)){
 				scanFinger = true;
 				proby = 0;
 				while(scanFinger){
 					checkFinger();
 				}
 			}
-			if(PORTB2 == 0 && !(enrollFinger)){
+			if(bit_is_clear(PINB, 4) && !(enrollFinger)){
 				id = getID();
 				newFinger(id);
 			}
-			if(PORTB3 == 0 && !(removeFinger)){
+			if(bit_is_clear(PINB, 5) && !(removeFinger)){
 				id = getID();
 				deleteFinger(id);
 			}
 		}
 		else{
-
+			if(bit_is_clear(PINB, 3)){
+				doorLocked = true;
+				lcd_setCursor(0,0);
+				lcd_send_string(" Drzwi zamkniete");
+			}
 		}
 	}
 	return 0;
 }
 
-void newFinger(uint16_t id){
+void newFinger(uint8_t id){
 	
 }
 
-void deleteFinger(uint16_t id){
+void deleteFinger(uint8_t id){
 	
 }
 
@@ -79,9 +88,23 @@ void checkFinger(){
 		if(tmp[0] == 0x00){
 			fps_search();
 			if(tmp[0] == 0x00){
+				if(enrollFinger){
+					uint16_t mainID = tmp[1] << 8;
+					mainID += tmp[2];
+					if(mainID == mainUserID){
+						mainUser = true;
+						scanFinger = false;
+					}
+					else{
+						enrollFinger = false;
+						mainUser = false;
+						scanFinger = false;
+					}
+				}
+				else{
 				uint16_t score;
-				score = tmp[1] << 8;
-				score += tmp[2];
+				score = tmp[3] << 8;
+				score += tmp[4];
 				
 				lcd_clear();
 				lcd_setCursor(0,0);
@@ -89,13 +112,17 @@ void checkFinger(){
 				lcd_setCursor(0,1);
 				lcd_send_string(" Zgodnosc: ");
 				lcd_setCursor(11,1);
-				lcd_send_string(score);
+				lcd_send_string((char*) score);
 				lcd_setCursor(15,1);
 				lcd_send_string("%");
-				_delay_ms(2000);
 				//TODO- otwieranie elektrozamka
+				_delay_ms(5000);
+				lcd_clear();
+				lcd_setCursor(0,0);
+				lcd_send_string("--Drzwi otwarte--");
 				scanFinger = false;
 				doorLocked = false;
+				}
 			}
 			else{
 				lcd_clear();
@@ -131,16 +158,64 @@ void checkFinger(){
 			lcd_send_string("Zbyt wiele prob!");
 			lcd_setCursor(0,1);
 			lcd_send_string("****************");
-			_delay_ms(1500);
+			_delay_ms(2000);
 			scanFinger = false;
 		}
 	}
 }
-	
 
-uint16_t getID(){
-	uint16_t id = 0;
 	
-	return id;
+uint8_t getID(){
+	uint8_t id = 1;
+	
+	lcd_clear();
+	lcd_setCursor(0,0);
+	lcd_send_string("Wybierz ID:");
+	lcd_setCursor(0,11);
+	lcd_send_string((char*) id);
+	while(getID_bool){
+		if(bit_is_clear(PINB, 3)){
+			if(id == 255){
+				lcd_setCursor(0,11);
+				lcd_send_string((char*) 255);
+			}
+			else{	
+				id++;
+				lcd_setCursor(0,11);
+				lcd_send_string((char*) id);	
+			}
+		}
+		else if(bit_is_clear(PINB, 4)){
+			if(id == 10){
+				id--;
+				lcd_clear();
+				lcd_setCursor(0,0);
+				lcd_send_string("Wybierz ID:");
+				lcd_setCursor(0,11);
+				lcd_send_string((char*) id);
+			}
+			else if(id == 0){
+				lcd_setCursor(0,11);
+				lcd_send_string((char*) 0);
+			}
+			else{
+				id--;
+				lcd_setCursor(0,11);
+				lcd_send_string((char*) id);
+			}
+		}
+		else if(bit_is_clear(PINB, 5)){
+			getID_bool = false;
+			return id;
+		}
+	}
+
 }
 
+uint16_t getTemplateCount(){
+	uint16_t template;
+	fps_templateNum();
+	template = tmp[1] << 8;
+	template += tmp[2];
+	return template;
+}

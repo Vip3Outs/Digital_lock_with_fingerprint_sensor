@@ -1,5 +1,5 @@
 #include "fps.h"
-uint8_t tmp[3];
+
 void fps_transmit_header(){
 	//starting code
 	putByte(0xEF);
@@ -26,11 +26,11 @@ void fps_confirmation(uint8_t instruction_code){
 	}
 	if(instruction_code == 0x04){
 		//page_ID
-		getByte();
-		getByte();
-		//MatchScore
 		tmp[1] = getByte();
 		tmp[2] = getByte();
+		//MatchScore
+		tmp[3] = getByte();
+		tmp[4] = getByte();
 	}
 	//checksum
 	getByte();
@@ -149,4 +149,20 @@ void fps_deleteModel(uint16_t deleteID){
 	putByte(deleteID & 0x00FF);
 	
 	fps_confirmation(0x0c);
+}
+
+void fps_templateNum(){
+	//header
+	fps_transmit_header();
+	//length
+	putByte(0x00);
+	putByte(0x03);
+	//instruction
+	putByte(0x1D);	
+	//sum
+	putByte(0x00);
+	putByte(0x21);
+	
+	fps_confirmation(0x1D);
+	
 }
