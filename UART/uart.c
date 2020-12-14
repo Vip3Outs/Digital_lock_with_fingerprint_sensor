@@ -2,7 +2,7 @@
 #include <avr/io.h>
 
 
-void initUART(void){
+void initUART(){
 	DDRD |= (1 << PD1);
 	DDRD &= ~ (1 << PD0);
 
@@ -16,7 +16,7 @@ void initUART(void){
 
 }
 
-uint8_t getByte(void){
+uint8_t getByte(){
 	//sprawdz czy zostalo cos otrzymane
 	while (!(UCSR0A & (1 << RXC0)));
 	return (uint8_t) UDR0;

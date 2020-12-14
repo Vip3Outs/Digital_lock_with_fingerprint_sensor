@@ -14,8 +14,8 @@
 #define RX_START()		UCSR0B |= _BV(RXEN0)	//enable RX
 
 
-void initUART(void);
-uint8_t getByte(void);
+void initUART();
+uint8_t getByte();
 void putByte(unsigned char data);
 
 

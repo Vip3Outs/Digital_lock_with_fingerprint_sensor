@@ -3,7 +3,7 @@
 
 uint8_t led_pin;
 
-void header_transmit(char t){
+void lcd_transmit_header(char t){
 	t <<= 4;
 	i2c_send_packet(led_pin |= 0x04, SLA_WRITE_ADDR);
 	_delay_us(50);
@@ -16,29 +16,29 @@ void lcd_send_byte(char c){
 	char highc = 0;
 	highc = c >> 4;
 	i2c_send_packet(led_pin &=~ 0x01, SLA_WRITE_ADDR); 
-	header_transmit(highc);
-	header_transmit(c);
+	lcd_transmit_header(highc);
+	lcd_transmit_header(c);
 }
 
 void lcd_send_char(char c){
 	char highc = 0;
 	highc = c >> 4;
 	i2c_send_packet (led_pin |= 0x01, SLA_WRITE_ADDR);
-	header_transmit(highc);
-	header_transmit(c);
+	lcd_transmit_header(highc);
+	lcd_transmit_header(c);
 }
 
 void lcd_init(){
 	led_pin = 0;
 	i2c_init();
 	_delay_ms(15);
-	header_transmit(0b00000011);	//Enter 4bit mode
+	lcd_transmit_header(0b00000011);	//Enter 4bit mode
 	_delay_ms(4);
-	header_transmit(0b00000011);					
+	lcd_transmit_header(0b00000011);					
 	_delay_us(100);							
-	header_transmit(0b00000011);					
+	lcd_transmit_header(0b00000011);					
 	_delay_ms(1);
-	header_transmit(0b00000010);
+	lcd_transmit_header(0b00000010);
 	_delay_ms(1);			
 	lcd_send_byte(0x28);			//Select 16x2 LCD in 4Bit mode
 	_delay_ms(1);	
