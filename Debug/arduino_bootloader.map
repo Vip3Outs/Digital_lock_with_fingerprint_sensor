@@ -21,12 +21,6 @@ Discarded input sections
  .text          0x00000000        0x0 FPS/fps.o
  .data          0x00000000        0x0 FPS/fps.o
  .bss           0x00000000        0x0 FPS/fps.o
- .text.fps_genModel
-                0x00000000       0x34 FPS/fps.o
- .text.fps_storeModel
-                0x00000000       0x58 FPS/fps.o
- .text.fps_deleteModel
-                0x00000000       0x60 FPS/fps.o
  .text          0x00000000        0x0 I2C/i2c.o
  .data          0x00000000        0x0 I2C/i2c.o
  .bss           0x00000000        0x0 I2C/i2c.o
@@ -38,10 +32,6 @@ Discarded input sections
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
- .text.newFinger
-                0x00000000        0x2 main.o
- .text.deleteFinger
-                0x00000000        0x2 main.o
  .text          0x00000000        0x0 UART/uart.o
  .data          0x00000000        0x0 UART/uart.o
  .bss           0x00000000        0x0 UART/uart.o
@@ -224,7 +214,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x882
+.text           0x00000000      0xda2
  *(.vectors)
  .vectors       0x00000000       0x68 D:/Atmel Studio 7.0/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
                 0x00000000                __vector_default
@@ -326,64 +316,82 @@ END GROUP
  .text.fps_search
                 0x000001b2       0x5c FPS/fps.o
                 0x000001b2                fps_search
- .text.fps_templateNum
+ .text.fps_genModel
                 0x0000020e       0x34 FPS/fps.o
-                0x0000020e                fps_templateNum
+                0x0000020e                fps_genModel
+ .text.fps_storeModel
+                0x00000242       0x58 FPS/fps.o
+                0x00000242                fps_storeModel
+ .text.fps_deleteModel
+                0x0000029a       0x60 FPS/fps.o
+                0x0000029a                fps_deleteModel
+ .text.fps_templateNum
+                0x000002fa       0x34 FPS/fps.o
+                0x000002fa                fps_templateNum
  .text.i2c_init
-                0x00000242        0xc I2C/i2c.o
-                0x00000242                i2c_init
+                0x0000032e        0xc I2C/i2c.o
+                0x0000032e                i2c_init
  .text.i2c_start_condition
-                0x0000024e       0x12 I2C/i2c.o
-                0x0000024e                i2c_start_condition
+                0x0000033a       0x12 I2C/i2c.o
+                0x0000033a                i2c_start_condition
  .text.i2c_send_byte
-                0x00000260       0x16 I2C/i2c.o
-                0x00000260                i2c_send_byte
+                0x0000034c       0x16 I2C/i2c.o
+                0x0000034c                i2c_send_byte
  .text.i2c_send_packet
-                0x00000276       0x24 I2C/i2c.o
-                0x00000276                i2c_send_packet
+                0x00000362       0x24 I2C/i2c.o
+                0x00000362                i2c_send_packet
  .text.lcd_transmit_header
-                0x0000029a       0x56 LCD/lcd.o
-                0x0000029a                lcd_transmit_header
+                0x00000386       0x56 LCD/lcd.o
+                0x00000386                lcd_transmit_header
  .text.lcd_send_byte
-                0x000002f0       0x2c LCD/lcd.o
-                0x000002f0                lcd_send_byte
+                0x000003dc       0x2c LCD/lcd.o
+                0x000003dc                lcd_send_byte
  .text.lcd_send_char
-                0x0000031c       0x2c LCD/lcd.o
-                0x0000031c                lcd_send_char
+                0x00000408       0x2c LCD/lcd.o
+                0x00000408                lcd_send_char
  .text.lcd_init
-                0x00000348       0xb8 LCD/lcd.o
-                0x00000348                lcd_init
+                0x00000434       0xb8 LCD/lcd.o
+                0x00000434                lcd_init
  .text.lcd_clear
-                0x00000400       0x14 LCD/lcd.o
-                0x00000400                lcd_clear
+                0x000004ec       0x14 LCD/lcd.o
+                0x000004ec                lcd_clear
  .text.lcd_setCursor
-                0x00000414       0x10 LCD/lcd.o
-                0x00000414                lcd_setCursor
+                0x00000500       0x10 LCD/lcd.o
+                0x00000500                lcd_setCursor
  .text.lcd_send_string
-                0x00000424       0x1e LCD/lcd.o
-                0x00000424                lcd_send_string
+                0x00000510       0x1e LCD/lcd.o
+                0x00000510                lcd_send_string
+ .text.lcd_send_info
+                0x0000052e       0x32 LCD/lcd.o
+                0x0000052e                lcd_send_info
+ .text.newFinger
+                0x00000560      0x1a6 main.o
+                0x00000560                newFinger
+ .text.deleteFinger
+                0x00000706       0xaa main.o
+                0x00000706                deleteFinger
  .text.checkFinger
-                0x00000442      0x1ec main.o
-                0x00000442                checkFinger
- .text.getID    0x0000062e       0xca main.o
-                0x0000062e                getID
+                0x000007b0      0x208 main.o
+                0x000007b0                checkFinger
+ .text.getID    0x000009b8       0xd0 main.o
+                0x000009b8                getID
  .text.getTemplateCount
-                0x000006f8       0x18 main.o
-                0x000006f8                getTemplateCount
- .text.main     0x00000710      0x128 main.o
-                0x00000710                main
+                0x00000a88       0x2a main.o
+                0x00000a88                getTemplateCount
+ .text.main     0x00000ab2      0x2a6 main.o
+                0x00000ab2                main
  .text.initUART
-                0x00000838       0x26 UART/uart.o
-                0x00000838                initUART
- .text.getByte  0x0000085e       0x10 UART/uart.o
-                0x0000085e                getByte
- .text.putByte  0x0000086e       0x10 UART/uart.o
-                0x0000086e                putByte
-                0x0000087e                . = ALIGN (0x2)
+                0x00000d58       0x26 UART/uart.o
+                0x00000d58                initUART
+ .text.getByte  0x00000d7e       0x10 UART/uart.o
+                0x00000d7e                getByte
+ .text.putByte  0x00000d8e       0x10 UART/uart.o
+                0x00000d8e                putByte
+                0x00000d9e                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000087e        0x0 d:/atmel studio 7.0/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x0000087e                _exit
-                0x0000087e                exit
+ .fini9         0x00000d9e        0x0 d:/atmel studio 7.0/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x00000d9e                _exit
+                0x00000d9e                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -402,11 +410,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000087e        0x4 d:/atmel studio 7.0/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x00000d9e        0x4 d:/atmel studio 7.0/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000882                _etext = .
+                0x00000da2                _etext = .
 
-.data           0x00800100      0x11e load address 0x00000882
+.data           0x00800100      0x268 load address 0x00000da2
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -420,49 +428,49 @@ END GROUP
  *(.rodata)
  *(.rodata*)
  .rodata.str1.1
-                0x00800103      0x11a main.o
+                0x00800103      0x265 main.o
+                                0x266 (size before relaxing)
  *(.gnu.linkonce.r*)
-                0x0080021e                . = ALIGN (0x2)
- *fill*         0x0080021d        0x1 
-                0x0080021e                _edata = .
-                0x0080021e                PROVIDE (__data_end, .)
+                0x00800368                . = ALIGN (0x2)
+                0x00800368                _edata = .
+                0x00800368                PROVIDE (__data_end, .)
 
-.bss            0x0080021e        0xd
-                0x0080021e                PROVIDE (__bss_start, .)
+.bss            0x00800368        0xd
+                0x00800368                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
- .bss.proby     0x0080021e        0x1 main.o
-                0x0080021e                proby
+ .bss.proby     0x00800368        0x1 main.o
+                0x00800368                proby
  .bss.getID_bool
-                0x0080021f        0x1 main.o
-                0x0080021f                getID_bool
- .bss.mainUser  0x00800220        0x1 main.o
-                0x00800220                mainUser
+                0x00800369        0x1 main.o
+                0x00800369                getID_bool
+ .bss.mainUser  0x0080036a        0x1 main.o
+                0x0080036a                mainUser
  .bss.removeFinger
-                0x00800221        0x1 main.o
-                0x00800221                removeFinger
+                0x0080036b        0x1 main.o
+                0x0080036b                removeFinger
  .bss.enrollFinger
-                0x00800222        0x1 main.o
-                0x00800222                enrollFinger
+                0x0080036c        0x1 main.o
+                0x0080036c                enrollFinger
  .bss.scanFinger
-                0x00800223        0x1 main.o
-                0x00800223                scanFinger
+                0x0080036d        0x1 main.o
+                0x0080036d                scanFinger
  *(COMMON)
- COMMON         0x00800224        0x5 FPS/fps.o
-                0x00800224                tmp
- COMMON         0x00800229        0x1 LCD/lcd.o
-                0x00800229                led_pin
- COMMON         0x0080022a        0x1 main.o
-                0x0080022a                id
-                0x0080022b                PROVIDE (__bss_end, .)
-                0x00000882                __data_load_start = LOADADDR (.data)
-                0x000009a0                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x0080036e        0x5 FPS/fps.o
+                0x0080036e                tmp
+ COMMON         0x00800373        0x1 LCD/lcd.o
+                0x00800373                led_pin
+ COMMON         0x00800374        0x1 main.o
+                0x00800374                id
+                0x00800375                PROVIDE (__bss_end, .)
+                0x00000da2                __data_load_start = LOADADDR (.data)
+                0x0000100a                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x0080022b        0x0
+.noinit         0x00800375        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x0080022b                _end = .
+                0x00800375                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -531,77 +539,77 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x168
+.debug_aranges  0x00000000      0x170
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x60 FPS/fps.o
  .debug_aranges
                 0x00000060       0x40 I2C/i2c.o
  .debug_aranges
-                0x000000a0       0x50 LCD/lcd.o
+                0x000000a0       0x58 LCD/lcd.o
  .debug_aranges
-                0x000000f0       0x48 main.o
+                0x000000f8       0x48 main.o
  .debug_aranges
-                0x00000138       0x30 UART/uart.o
+                0x00000140       0x30 UART/uart.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x22dc
+.debug_info     0x00000000     0x2d9e
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x5f4 D:/Atmel Studio 7.0/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_info    0x000005f4      0x8f2 FPS/fps.o
  .debug_info    0x00000ee6      0x14d I2C/i2c.o
- .debug_info    0x00001033      0x71e LCD/lcd.o
- .debug_info    0x00001751      0xacc main.o
- .debug_info    0x0000221d       0xbf UART/uart.o
+ .debug_info    0x00001033      0x83a LCD/lcd.o
+ .debug_info    0x0000186d     0x1472 main.o
+ .debug_info    0x00002cdf       0xbf UART/uart.o
 
-.debug_abbrev   0x00000000      0xbb3
+.debug_abbrev   0x00000000      0xc0f
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x5a2 D:/Atmel Studio 7.0/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_abbrev  0x000005a2      0x119 FPS/fps.o
  .debug_abbrev  0x000006bb       0xed I2C/i2c.o
- .debug_abbrev  0x000007a8      0x1a3 LCD/lcd.o
- .debug_abbrev  0x0000094b      0x1da main.o
- .debug_abbrev  0x00000b25       0x8e UART/uart.o
+ .debug_abbrev  0x000007a8      0x1e2 LCD/lcd.o
+ .debug_abbrev  0x0000098a      0x1f7 main.o
+ .debug_abbrev  0x00000b81       0x8e UART/uart.o
 
-.debug_line     0x00000000      0xe13
+.debug_line     0x00000000     0x10c9
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x133 D:/Atmel Studio 7.0/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_line    0x00000133      0x330 FPS/fps.o
  .debug_line    0x00000463      0x13a I2C/i2c.o
- .debug_line    0x0000059d      0x276 LCD/lcd.o
- .debug_line    0x00000813      0x4f4 main.o
- .debug_line    0x00000d07      0x10c UART/uart.o
+ .debug_line    0x0000059d      0x2ab LCD/lcd.o
+ .debug_line    0x00000848      0x775 main.o
+ .debug_line    0x00000fbd      0x10c UART/uart.o
 
-.debug_frame    0x00000000      0x2b8
+.debug_frame    0x00000000      0x300
  *(.debug_frame)
  .debug_frame   0x00000000       0xd4 FPS/fps.o
  .debug_frame   0x000000d4       0x70 I2C/i2c.o
- .debug_frame   0x00000144       0xa8 LCD/lcd.o
- .debug_frame   0x000001ec       0x88 main.o
- .debug_frame   0x00000274       0x44 UART/uart.o
+ .debug_frame   0x00000144       0xcc LCD/lcd.o
+ .debug_frame   0x00000210       0xac main.o
+ .debug_frame   0x000002bc       0x44 UART/uart.o
 
-.debug_str      0x00000000      0x62e
+.debug_str      0x00000000      0x648
  *(.debug_str)
  .debug_str     0x00000000      0x208 D:/Atmel Studio 7.0/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_str     0x00000208      0x20e FPS/fps.o
                                 0x242 (size before relaxing)
  .debug_str     0x00000416       0x69 I2C/i2c.o
                                 0x1d1 (size before relaxing)
- .debug_str     0x0000047f       0xd6 LCD/lcd.o
-                                0x257 (size before relaxing)
- .debug_str     0x00000555       0xc5 main.o
-                                0x2f1 (size before relaxing)
- .debug_str     0x0000061a       0x14 UART/uart.o
+ .debug_str     0x0000047f       0xf0 LCD/lcd.o
+                                0x271 (size before relaxing)
+ .debug_str     0x0000056f       0xc5 main.o
+                                0x32b (size before relaxing)
+ .debug_str     0x00000634       0x14 UART/uart.o
                                 0x190 (size before relaxing)
 
-.debug_loc      0x00000000      0xaa0
+.debug_loc      0x00000000     0x13f0
  *(.debug_loc)
  .debug_loc     0x00000000      0x1fb FPS/fps.o
  .debug_loc     0x000001fb       0xb4 I2C/i2c.o
- .debug_loc     0x000002af      0x4ea LCD/lcd.o
- .debug_loc     0x00000799      0x307 main.o
+ .debug_loc     0x000002af      0x605 LCD/lcd.o
+ .debug_loc     0x000008b4      0xb3c main.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -621,13 +629,13 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x118
+.debug_ranges   0x00000000      0x120
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x50 FPS/fps.o
  .debug_ranges  0x00000050       0x30 I2C/i2c.o
- .debug_ranges  0x00000080       0x40 LCD/lcd.o
- .debug_ranges  0x000000c0       0x38 main.o
- .debug_ranges  0x000000f8       0x20 UART/uart.o
+ .debug_ranges  0x00000080       0x48 LCD/lcd.o
+ .debug_ranges  0x000000c8       0x38 main.o
+ .debug_ranges  0x00000100       0x20 UART/uart.o
 
 .debug_macro
  *(.debug_macro)

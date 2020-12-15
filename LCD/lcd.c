@@ -66,3 +66,11 @@ void lcd_send_string(const char *str){
 	while(*str != 0)
 	lcd_send_char(*str++);
 }
+
+void lcd_send_info(const char *line1, const char *line2){
+	lcd_clear();
+	lcd_setCursor(0,0);
+	lcd_send_string(line1);
+	lcd_setCursor(0,1);
+	lcd_send_string(line2);
+}

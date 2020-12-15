@@ -33,33 +33,21 @@ int main(void){
 	
 	DDRB = 0b00001000; //B0,B1,B2 - 3 przyciski; B3 - wyjscie elektrozamka
 	PORTB = 0b00000111;
-	
-	lcd_clear();
-	lcd_setCursor(0,0);
-	lcd_send_string("    Witaj w:    ");
-	lcd_setCursor(0,1);
-	lcd_send_string(" Zamku szyfrowym");
+	lcd_send_info("    Witaj w:    ", " Zamku szyfrowym");
 	_delay_ms(2000);
 	
 	if(getTemplateCount() == 0){
-		lcd_clear();
-		lcd_setCursor(0,0);
-		lcd_send_string(" Pierwsze uzycie");
-		lcd_setCursor(0,1);
-		lcd_send_string("Admin potrzebny:");
+		lcd_send_info(" Pierwsze uzycie", "Admin potrzebny!");
+		_delay_ms(1000);
+		scanFinger = true;
 		enrollFinger = true;
 		while(enrollFinger){
 			newFinger(mainUserID);
 		}
 	}
-	
-	lcd_clear();
-	lcd_setCursor(0,0);
-	lcd_send_string(" Drzwi zamkniete");
-	
+	lcd_send_info(" Drzwi zamkniete", "");
 			
-	while(1)
-	{
+	while(1){
 		if(doorLocked){
 			if(bit_is_clear(PINB, 0) && !(scanFinger)){
 				scanFinger = true;
@@ -69,28 +57,75 @@ int main(void){
 				}
 			}
 			if(bit_is_clear(PINB, 1) && !(enrollFinger)){
-				id = getID();
 				enrollFinger = true;
-				scanFinger = true;
-				while(enrollFinger){
-					newFinger(id);
+				lcd_send_info(" Wprowadz odcisk","    dla: ADMIN   ");
+				checkFinger();
+				_delay_ms(2000);
+				if(enrollFinger == false){
+					lcd_send_info(" Drzwi zamkniete", "");
+					break;
+				}
+				if(mainUser){
+					id = getID();
+					newFinger(id);	
+				}
+				else{
+					lcd_send_info("Palec nie nalezy", "    do: ADMIN   ");
+					removeFinger = false;
+					_delay_ms(2000);
+					lcd_send_info(" Drzwi zamkniete", "");
 				}
 			}
 			if(bit_is_clear(PINB, 2) && !(removeFinger)){
-				id = getID();
 				removeFinger = true;
-				while(removeFinger){
-					deleteFinger(id);
+				lcd_send_info(" Wprowadz odcisk","    dla: ADMIN   ");
+				checkFinger();
+				_delay_ms(2000);
+				if(removeFinger == false){
+					lcd_send_info(" Drzwi zamkniete", "");
+					break;
+				}
+				if(mainUser){
+					id = getID();
+					if(id == mainUserID){
+						lcd_send_info("  Czy nadpisac  ", "palec dla ADMIN?");
+						_delay_ms(2000);
+						lcd_send_info("B1- NIE  B2- TAK", "");
+						while(true){
+							if(bit_is_clear(PINB, 0)){
+								lcd_send_info(" Drzwi zamkniete", "");
+								removeFinger = false;
+								mainUser = false;
+								_delay_ms(200);
+								break;
+							}
+							else if(bit_is_clear(PINB, 2)){
+								newFinger(mainUserID);
+								mainUser = false;
+								lcd_send_info(" Drzwi zamkniete", "");
+								break;
+							}
+						}
+					}
+					else{
+						deleteFinger(id);
+						mainUser = false;
+					}
+				}
+				else{
+					lcd_send_info("Palec nie nalezy", "    do: ADMIN   ");
+					removeFinger = false;
+					_delay_ms(2000);
+					lcd_send_info(" Drzwi zamkniete", "");
 				}
 			}
 		}
+		//gdy drzwi sa otwarte
 		else{
 			if(bit_is_clear(PINB, 0)){
 				doorLocked = true;
 				PORTB ^= 1 << PINB3;
-				lcd_clear();
-				lcd_setCursor(0,0);
-				lcd_send_string(" Drzwi zamkniete");
+				lcd_send_info(" Drzwi zamkniete", "");
 			}
 		}
 	}
@@ -98,10 +133,62 @@ int main(void){
 }
 
 void newFinger(uint8_t id){
-	
+	lcd_send_info("Umiesc palec na ", " czytniku linii ");
+	_delay_ms(1000);
+	fps_read_finger();
+	_delay_ms(500);
+	if(tmp[0] == 0x00){
+		fps_img2TZ(1);
+		_delay_ms(100);
+		if(tmp[0] == 0x00){
+			lcd_send_info("   Jeszcze raz  ", "  umiesc palec  ");
+			_delay_ms(1500);
+			fps_read_finger();
+			if(tmp[0] == 0x00){
+				fps_img2TZ(2);
+				if(tmp[0] == 0x00){
+					fps_genModel();
+					if(tmp[0] == 0x00){
+						fps_storeModel(id);
+						if(tmp[0] == 0x00){
+							lcd_send_info(" Pomyslny zapis ", " palca w bazie! ");
+							_delay_ms(2000);
+						}
+						else{
+							lcd_send_info("  Blad podczas  ", " zapisu do bazy ");
+							_delay_ms(2000);
+						}
+					}
+					else{
+						lcd_send_info("  Blad podczas  ", "tworzenia modelu");
+						_delay_ms(2000);
+					}
+				}
+				else{
+					lcd_send_info(" Blad tworzenia ", "  obrazu palca  ");
+					_delay_ms(2000);
+				}
+			}
+			else{
+				lcd_send_info("   Brak palca!  ", "Sprobuj ponownie");
+				_delay_ms(2000);
+			}
+		}
+		else{
+			lcd_send_info(" Blad tworzenia ", "  obrazu palca  ");
+			_delay_ms(2000);
+		}
+	}
+	else{
+		lcd_send_info("   Brak palca!  ", "Sprobuj ponownie");
+		_delay_ms(2000);
+	}
+	enrollFinger = false;
+	lcd_send_info(" Drzwi zamkniete", "");	
 }
 
 void deleteFinger(uint8_t id){
+	
 	fps_deleteModel(id);
 	_delay_ms(100);
 	if(tmp[0] == 0x00){
@@ -109,34 +196,25 @@ void deleteFinger(uint8_t id){
 		lcd_setCursor(0,0);
 		lcd_send_string(" Usunieto palec ");
 		lcd_setCursor(0,1);
-		lcd_send_string("   Pomyslnie!   ");
+		lcd_send_string("o ID: ");
+		lcd_setCursor(6,1);
+		lcd_send_string((char*) id);
 		_delay_ms(2000);
-		lcd_clear();
-		lcd_setCursor(0,0);
-		lcd_send_string(" Drzwi zamkniete");
+		lcd_send_info(" Drzwi zamkniete", "");
 	}
 	else{
-		lcd_clear();
-		lcd_setCursor(0,0);
-		lcd_send_string(" Nie udalo sie  ");
-		lcd_setCursor(0,1);
-		lcd_send_string("  usunac palca! ");
+		lcd_send_info(" Nie udalo sie  ", "  usunac palca! ");
 		_delay_ms(2000);
-		lcd_clear();
-		lcd_setCursor(0,0);
-		lcd_send_string(" Drzwi zamkniete");
+		lcd_send_info(" Drzwi zamkniete", "");
 	}
 	removeFinger = false;
 }
 
 void checkFinger(){
-	lcd_clear();
-	lcd_setCursor(0,0);
-	lcd_send_string("Umiesc palec na ");
-	lcd_setCursor(0,1);
-	lcd_send_string(" czytniku linii ");
+	lcd_send_info("Umiesc palec na ", " czytniku linii ");
+	_delay_ms(1000);
 	fps_read_finger();
-	_delay_ms(2000);
+	_delay_ms(500);
 	if(tmp[0] == 0x00){
 		fps_img2TZ(1);
 		_delay_ms(100);
@@ -144,16 +222,18 @@ void checkFinger(){
 			fps_search();
 			_delay_ms(100);
 			if(tmp[0] == 0x00){
-				if(enrollFinger){
+				if(enrollFinger == true || removeFinger == true){
 					uint16_t mainID = tmp[1] << 8;
 					mainID += tmp[2];
 					if(mainID == mainUserID){
 						mainUser = true;
 						scanFinger = false;
+						removeFinger = false;
 					}
 					else{
 						mainUser = false;
 						scanFinger = false;
+						removeFinger = false;
 					}
 				}
 				else{
@@ -172,49 +252,38 @@ void checkFinger(){
 					lcd_send_string("%");
 					PORTB ^= 1 << PINB3;
 					_delay_ms(3000);
-					lcd_clear();
-					lcd_setCursor(0,0);
-					lcd_send_string("--Drzwi otwarte--");
+					lcd_send_info("--Drzwi otwarte--", "");
 					scanFinger = false;
 					doorLocked = false;
 				}
 			}
 			else{
-				lcd_clear();
-				lcd_setCursor(0,0);
-				lcd_send_string(" Nie znaleziono ");
-				lcd_setCursor(0,1);
-				lcd_send_string("palca w systemie");
+				lcd_send_info(" Nie znaleziono ", "palca w systemie");
+				removeFinger = false;
+				enrollFinger = false;
 				_delay_ms(3000);
 				return;
 			}
 		}
 		else{
-			lcd_clear();
-			lcd_setCursor(0,0);
-			lcd_send_string(" Blad tworzenia ");
-			lcd_setCursor(0,1);
-			lcd_send_string("  obrazu palca  ");
+			lcd_send_info(" Blad tworzenia ", "  obrazu palca  ");
+			removeFinger = false;
+			enrollFinger = false;
 			_delay_ms(3000);
 			return;
 		}
 	}
 	else{
-		lcd_clear();
-		lcd_setCursor(0,0);
-		lcd_send_string("   Brak palca!  ");
-		lcd_setCursor(0,1);
-		lcd_send_string("Sprobuj ponownie");
+		lcd_send_info("   Brak palca!  ", "Sprobuj ponownie");
+		removeFinger = false;
+		enrollFinger = false;
 		_delay_ms(1500);
 		proby++;
 		if(proby == 4){
-			lcd_clear();
-			lcd_setCursor(0,0);
-			lcd_send_string("Zbyt wiele prob!");
-			lcd_setCursor(0,1);
-			lcd_send_string("****************");
-			_delay_ms(2000);
+			lcd_send_info("Zbyt wiele prob!", "****************");
 			scanFinger = false;
+			_delay_ms(2000);
+			lcd_send_info(" Drzwi zamkniete", "");
 		}
 	}
 }
