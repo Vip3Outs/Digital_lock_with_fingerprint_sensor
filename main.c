@@ -21,7 +21,6 @@ volatile bool scanFinger = false, enrollFinger = false, removeFinger = false, do
 uint8_t id;
 uint8_t proby = 0;
 uint16_t mainUserID = 1;
-uint8_t tmp[5];
 int main(void){
 	/*
 	*Wstepne parametry programu
@@ -126,6 +125,8 @@ int main(void){
 				doorLocked = true;
 				PORTB ^= 1 << PINB3;
 				lcd_send_info(" Drzwi zamkniete", "");
+				_delay_ms(5000);
+				PORTB ^= 1 << PINB3;
 			}
 		}
 	}
@@ -133,17 +134,66 @@ int main(void){
 }
 
 void newFinger(uint8_t id){
-	lcd_send_info("Umiesc palec na ", " czytniku linii ");
-	_delay_ms(1000);
+	lcd_send_info("  Umiesc palec  ", "Skanowanie:-----");
 	fps_read_finger();
-	_delay_ms(500);
+	uint8_t timer = 0;
+	while(tmp[0] == 0x02 && timer < 50){
+		fps_read_finger();
+		_delay_ms(100);
+		timer += 1;
+		if(timer == 10){
+			lcd_send_info("  Umiesc palec  ", "Skanowanie: ----");
+		}
+		if(timer == 20){
+			lcd_send_info("  Umiesc palec  ", "Skanowanie:  ---");
+		}
+		if(timer == 30){
+			lcd_send_info("  Umiesc palec  ", "Skanowanie:   --");
+		}
+		if(timer == 40){
+			lcd_send_info("  Umiesc palec  ", "Skanowanie:    -");
+		}
+		if(timer == 49){
+			lcd_send_info("  Brak palca na ", " czytniku linii ");
+			_delay_ms(1500);
+			enrollFinger = false;
+			lcd_send_info(" Drzwi zamkniete", "");
+			break;
+		}
+	}
 	if(tmp[0] == 0x00){
 		fps_img2TZ(1);
 		_delay_ms(100);
 		if(tmp[0] == 0x00){
-			lcd_send_info("   Jeszcze raz  ", "  umiesc palec  ");
+			lcd_send_info("   Raz jeszcze  ", "  umiesc palec  ");
 			_delay_ms(1500);
-			fps_read_finger();
+				lcd_send_info("  Umiesc palec  ", "Skanowanie:-----");
+				fps_read_finger();
+				timer = 0;
+				while(tmp[0] == 0x02 && timer < 50){
+					fps_read_finger();
+					_delay_ms(100);
+					timer += 1;
+					if(timer == 10){
+						lcd_send_info("  Umiesc palec  ", "Skanowanie: ----");
+					}
+					if(timer == 20){
+						lcd_send_info("  Umiesc palec  ", "Skanowanie:  ---");
+					}
+					if(timer == 30){
+						lcd_send_info("  Umiesc palec  ", "Skanowanie:   --");
+					}
+					if(timer == 40){
+						lcd_send_info("  Umiesc palec  ", "Skanowanie:    -");
+					}
+					if(timer == 49){
+						lcd_send_info("  Brak palca na ", " czytniku linii ");
+						_delay_ms(1500);
+						enrollFinger = false;
+						lcd_send_info(" Drzwi zamkniete", "");
+						break;
+					}
+				}
 			if(tmp[0] == 0x00){
 				fps_img2TZ(2);
 				if(tmp[0] == 0x00){
@@ -211,10 +261,35 @@ void deleteFinger(uint8_t id){
 }
 
 void checkFinger(){
-	lcd_send_info("Umiesc palec na ", " czytniku linii ");
-	_delay_ms(1000);
+	lcd_send_info("  Umiesc palec  ", "Skanowanie:-----");
 	fps_read_finger();
-	_delay_ms(500);
+	uint8_t timer = 0;
+	while(tmp[0] == 0x02){
+		fps_read_finger();
+		_delay_ms(100);
+		timer += 1;
+		if(timer == 10){
+			lcd_send_info("  Umiesc palec  ", "Skanowanie: ----");
+		}
+		if(timer == 20){
+			lcd_send_info("  Umiesc palec  ", "Skanowanie:  ---");
+		}
+		if(timer == 30){
+			lcd_send_info("  Umiesc palec  ", "Skanowanie:   --");
+		}
+		if(timer == 40){
+			lcd_send_info("  Umiesc palec  ", "Skanowanie:    -");
+		}
+		if(timer == 50){
+			lcd_send_info("  Brak palca na ", " czytniku linii ");
+			_delay_ms(1500);
+			scanFinger = false;
+			enrollFinger = false;
+			removeFinger = false;
+			lcd_send_info(" Drzwi zamkniete", "");
+			break;
+		}
+	}
 	if(tmp[0] == 0x00){
 		fps_img2TZ(1);
 		_delay_ms(100);
@@ -259,33 +334,25 @@ void checkFinger(){
 			}
 			else{
 				lcd_send_info(" Nie znaleziono ", "palca w systemie");
-				removeFinger = false;
-				enrollFinger = false;
-				_delay_ms(3000);
-				return;
+				_delay_ms(2000);
 			}
 		}
 		else{
 			lcd_send_info(" Blad tworzenia ", "  obrazu palca  ");
-			removeFinger = false;
-			enrollFinger = false;
-			_delay_ms(3000);
-			return;
+			_delay_ms(2000);
 		}
 	}
 	else{
 		lcd_send_info("   Brak palca!  ", "Sprobuj ponownie");
-		removeFinger = false;
-		enrollFinger = false;
-		_delay_ms(1500);
-		proby++;
-		if(proby == 4){
-			lcd_send_info("Zbyt wiele prob!", "****************");
-			scanFinger = false;
-			_delay_ms(2000);
-			lcd_send_info(" Drzwi zamkniete", "");
-		}
+		_delay_ms(2000);
 	}
+	removeFinger = false;
+	enrollFinger = false;
+	scanFinger = false;
+	if(!doorLocked){
+	lcd_send_info(" Drzwi zamkniete", "");
+	}
+	
 }
 	
 uint8_t getID(){
