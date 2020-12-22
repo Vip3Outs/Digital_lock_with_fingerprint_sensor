@@ -3,8 +3,8 @@
 
 
 void initUART(){
-	DDRD |= (1 << PD1);
-	DDRD &= ~ (1 << PD0);
+	DDRD |= (1 << 1);
+	DDRD &= ~ (1 << 0);
 
 	UBRR0H = ((_UBRR) & 0xF00);
 	UBRR0L = (uint8_t) ((_UBRR) & 0xFF);
@@ -22,7 +22,7 @@ uint8_t getByte(){
 	return (uint8_t) UDR0;
 }
 
-void putByte(unsigned char data){
+void putByte(uint8_t data){
 	//zostan az rejestr nie bedzie pusty
 	while (!(UCSR0A & (1 << UDRE0)));
 	UDR0 = data;

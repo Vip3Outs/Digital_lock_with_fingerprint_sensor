@@ -16,7 +16,7 @@
 
 void initUART();
 uint8_t getByte();
-void putByte(unsigned char data);
+void putByte(uint8_t data);
 
 
 #endif /* __UART_H___ */

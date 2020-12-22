@@ -54,7 +54,7 @@ void fps_read_finger(){
 	fps_confirmation(0x01);
 }
 
-void fps_img2TZ(unsigned char buffer){
+void fps_img2TZ(uint8_t buffer){
 	//header
 	fps_transmit_header();
 	//length
@@ -62,6 +62,8 @@ void fps_img2TZ(unsigned char buffer){
 	putByte(0x04);
 	//instruction code
 	putByte(0x02);
+	//bufferID
+	putByte(buffer);
 	//sum
 	buffer+=7;
 	putByte(buffer & 0xFF00);
