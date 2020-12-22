@@ -1,6 +1,4 @@
 #define F_CPU 16000000
-#define BAUD 57600
-#define MyUBRR F_CPU/16/BAUD-1
 #include <avr/io.h>
 #include <avr/sfr_defs.h>
 #include <stdio.h>

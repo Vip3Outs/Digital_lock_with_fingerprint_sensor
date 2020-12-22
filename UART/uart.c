@@ -3,8 +3,8 @@
 
 
 void initUART(){
-	DDRD |= (1 << 1);
-	DDRD &= ~ (1 << 0);
+	DDRD |= (1 << PIND0);
+	DDRD &= ~ (1 << PIND1);
 
 	UBRR0H = ((_UBRR) & 0xF00);
 	UBRR0L = (uint8_t) ((_UBRR) & 0xFF);

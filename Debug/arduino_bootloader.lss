@@ -15,19 +15,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 00000170  00000000  00000000  00001440  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   000032cb  00000000  00000000  000015b0  2**0
+  6 .debug_info   000032b2  00000000  00000000  000015b0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000c66  00000000  00000000  0000487b  2**0
+  7 .debug_abbrev 00000c57  00000000  00000000  00004862  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   0000125c  00000000  00000000  000054e1  2**0
+  8 .debug_line   0000125c  00000000  00000000  000054b9  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  0000031c  00000000  00000000  00006740  2**2
+  9 .debug_frame  0000031c  00000000  00000000  00006718  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000065d  00000000  00000000  00006a5c  2**0
+ 10 .debug_str    0000064f  00000000  00000000  00006a34  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00001526  00000000  00000000  000070b9  2**0
+ 11 .debug_loc    000014a5  00000000  00000000  00007083  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000120  00000000  00000000  000085df  2**0
+ 12 .debug_ranges 00000120  00000000  00000000  00008528  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -617,16 +617,15 @@ void i2c_send_packet(unsigned char value, unsigned char address) {
 #include "lcd.h"
 #include <util/delay.h>
 
-uint8_t led_pin;
+uint8_t value;
 
-void lcd_transmit_header(char t){
+void lcd_transmit_header(char tmp){
      38e:	cf 93       	push	r28
      390:	c8 2f       	mov	r28, r24
-	t <<= 4;
-	i2c_send_packet(led_pin |= 0x04, SLA_WRITE_ADDR);
-     392:	80 91 d9 03 	lds	r24, 0x03D9	; 0x8003d9 <led_pin>
+	i2c_send_packet(value |= 0x04, SLA_WRITE_ADDR);
+     392:	80 91 d9 03 	lds	r24, 0x03D9	; 0x8003d9 <value>
      396:	84 60       	ori	r24, 0x04	; 4
-     398:	80 93 d9 03 	sts	0x03D9, r24	; 0x8003d9 <led_pin>
+     398:	80 93 d9 03 	sts	0x03D9, r24	; 0x8003d9 <value>
      39c:	6e e7       	ldi	r22, 0x7E	; 126
      39e:	70 e0       	ldi	r23, 0x00	; 0
      3a0:	90 e0       	ldi	r25, 0x00	; 0
@@ -637,25 +636,25 @@ void lcd_transmit_header(char t){
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
-     3a6:	80 e1       	ldi	r24, 0x10	; 16
-     3a8:	8a 95       	dec	r24
+     3a6:	30 e1       	ldi	r19, 0x10	; 16
+     3a8:	3a 95       	dec	r19
      3aa:	f1 f7       	brne	.-4      	; 0x3a8 <lcd_transmit_header+0x1a>
      3ac:	00 c0       	rjmp	.+0      	; 0x3ae <lcd_transmit_header+0x20>
 	_delay_us(50);
-	i2c_send_packet(led_pin | t, SLA_WRITE_ADDR);
-     3ae:	8c 2f       	mov	r24, r28
-     3b0:	82 95       	swap	r24
-     3b2:	80 7f       	andi	r24, 0xF0	; 240
-     3b4:	90 91 d9 03 	lds	r25, 0x03D9	; 0x8003d9 <led_pin>
-     3b8:	89 2b       	or	r24, r25
+	i2c_send_packet(value | (tmp << 4), SLA_WRITE_ADDR);
+     3ae:	20 91 d9 03 	lds	r18, 0x03D9	; 0x8003d9 <value>
+     3b2:	30 e1       	ldi	r19, 0x10	; 16
+     3b4:	c3 9f       	mul	r28, r19
+     3b6:	c0 01       	movw	r24, r0
+     3b8:	11 24       	eor	r1, r1
      3ba:	6e e7       	ldi	r22, 0x7E	; 126
      3bc:	70 e0       	ldi	r23, 0x00	; 0
-     3be:	90 e0       	ldi	r25, 0x00	; 0
+     3be:	82 2b       	or	r24, r18
      3c0:	0e 94 b5 01 	call	0x36a	; 0x36a <i2c_send_packet>
-	i2c_send_packet(led_pin &= ~0x04, SLA_WRITE_ADDR);
-     3c4:	80 91 d9 03 	lds	r24, 0x03D9	; 0x8003d9 <led_pin>
+	i2c_send_packet(value &= ~0x04, SLA_WRITE_ADDR);
+     3c4:	80 91 d9 03 	lds	r24, 0x03D9	; 0x8003d9 <value>
      3c8:	8b 7f       	andi	r24, 0xFB	; 251
-     3ca:	80 93 d9 03 	sts	0x03D9, r24	; 0x8003d9 <led_pin>
+     3ca:	80 93 d9 03 	sts	0x03D9, r24	; 0x8003d9 <value>
      3ce:	6e e7       	ldi	r22, 0x7E	; 126
      3d0:	70 e0       	ldi	r23, 0x00	; 0
      3d2:	90 e0       	ldi	r25, 0x00	; 0
@@ -671,25 +670,23 @@ void lcd_transmit_header(char t){
 
 000003e4 <lcd_send_byte>:
 
-void lcd_send_byte(char c){
+void lcd_send_byte(char tmp){
      3e4:	cf 93       	push	r28
      3e6:	c8 2f       	mov	r28, r24
-	char highc = 0;
-	highc = c >> 4;
-	i2c_send_packet(led_pin &=~ 0x01, SLA_WRITE_ADDR); 
-     3e8:	80 91 d9 03 	lds	r24, 0x03D9	; 0x8003d9 <led_pin>
+	i2c_send_packet(value &=~ 0x01, SLA_WRITE_ADDR); 
+     3e8:	80 91 d9 03 	lds	r24, 0x03D9	; 0x8003d9 <value>
      3ec:	8e 7f       	andi	r24, 0xFE	; 254
-     3ee:	80 93 d9 03 	sts	0x03D9, r24	; 0x8003d9 <led_pin>
+     3ee:	80 93 d9 03 	sts	0x03D9, r24	; 0x8003d9 <value>
      3f2:	6e e7       	ldi	r22, 0x7E	; 126
      3f4:	70 e0       	ldi	r23, 0x00	; 0
      3f6:	90 e0       	ldi	r25, 0x00	; 0
      3f8:	0e 94 b5 01 	call	0x36a	; 0x36a <i2c_send_packet>
-	lcd_transmit_header(highc);
+	lcd_transmit_header(tmp >> 4);
      3fc:	8c 2f       	mov	r24, r28
      3fe:	82 95       	swap	r24
      400:	8f 70       	andi	r24, 0x0F	; 15
      402:	0e 94 c7 01 	call	0x38e	; 0x38e <lcd_transmit_header>
-	lcd_transmit_header(c);
+	lcd_transmit_header(tmp);
      406:	8c 2f       	mov	r24, r28
      408:	0e 94 c7 01 	call	0x38e	; 0x38e <lcd_transmit_header>
 }
@@ -698,25 +695,23 @@ void lcd_send_byte(char c){
 
 00000410 <lcd_send_char>:
 
-void lcd_send_char(char c){
+void lcd_send_char(char tmp){
      410:	cf 93       	push	r28
      412:	c8 2f       	mov	r28, r24
-	char highc = 0;
-	highc = c >> 4;
-	i2c_send_packet (led_pin |= 0x01, SLA_WRITE_ADDR);
-     414:	80 91 d9 03 	lds	r24, 0x03D9	; 0x8003d9 <led_pin>
+	i2c_send_packet (value |= 0x01, SLA_WRITE_ADDR);
+     414:	80 91 d9 03 	lds	r24, 0x03D9	; 0x8003d9 <value>
      418:	81 60       	ori	r24, 0x01	; 1
-     41a:	80 93 d9 03 	sts	0x03D9, r24	; 0x8003d9 <led_pin>
+     41a:	80 93 d9 03 	sts	0x03D9, r24	; 0x8003d9 <value>
      41e:	6e e7       	ldi	r22, 0x7E	; 126
      420:	70 e0       	ldi	r23, 0x00	; 0
      422:	90 e0       	ldi	r25, 0x00	; 0
      424:	0e 94 b5 01 	call	0x36a	; 0x36a <i2c_send_packet>
-	lcd_transmit_header(highc);
+	lcd_transmit_header(tmp >> 4);
      428:	8c 2f       	mov	r24, r28
      42a:	82 95       	swap	r24
      42c:	8f 70       	andi	r24, 0x0F	; 15
      42e:	0e 94 c7 01 	call	0x38e	; 0x38e <lcd_transmit_header>
-	lcd_transmit_header(c);
+	lcd_transmit_header(tmp);
      432:	8c 2f       	mov	r24, r28
      434:	0e 94 c7 01 	call	0x38e	; 0x38e <lcd_transmit_header>
 }
@@ -726,8 +721,8 @@ void lcd_send_char(char c){
 0000043c <lcd_init>:
 
 void lcd_init(){
-	led_pin = 0;
-     43c:	10 92 d9 03 	sts	0x03D9, r1	; 0x8003d9 <led_pin>
+	value = 0;
+     43c:	10 92 d9 03 	sts	0x03D9, r1	; 0x8003d9 <value>
 	i2c_init();
      440:	0e 94 9b 01 	call	0x336	; 0x336 <i2c_init>
 	#else
@@ -823,18 +818,18 @@ void lcd_init(){
      4c6:	00 c0       	rjmp	.+0      	; 0x4c8 <lcd_init+0x8c>
      4c8:	00 00       	nop
 	_delay_ms(1);
-	i2c_send_packet(led_pin |= 0x08, SLA_WRITE_ADDR);	
-     4ca:	80 91 d9 03 	lds	r24, 0x03D9	; 0x8003d9 <led_pin>
+	i2c_send_packet(value |= 0x08, SLA_WRITE_ADDR);	
+     4ca:	80 91 d9 03 	lds	r24, 0x03D9	; 0x8003d9 <value>
      4ce:	88 60       	ori	r24, 0x08	; 8
-     4d0:	80 93 d9 03 	sts	0x03D9, r24	; 0x8003d9 <led_pin>
+     4d0:	80 93 d9 03 	sts	0x03D9, r24	; 0x8003d9 <value>
      4d4:	6e e7       	ldi	r22, 0x7E	; 126
      4d6:	70 e0       	ldi	r23, 0x00	; 0
      4d8:	90 e0       	ldi	r25, 0x00	; 0
      4da:	0e 94 b5 01 	call	0x36a	; 0x36a <i2c_send_packet>
-	i2c_send_packet(led_pin &=~ 0x02, SLA_WRITE_ADDR);
-     4de:	80 91 d9 03 	lds	r24, 0x03D9	; 0x8003d9 <led_pin>
+	i2c_send_packet(value &=~ 0x02, SLA_WRITE_ADDR);
+     4de:	80 91 d9 03 	lds	r24, 0x03D9	; 0x8003d9 <value>
      4e2:	8d 7f       	andi	r24, 0xFD	; 253
-     4e4:	80 93 d9 03 	sts	0x03D9, r24	; 0x8003d9 <led_pin>
+     4e4:	80 93 d9 03 	sts	0x03D9, r24	; 0x8003d9 <value>
      4e8:	6e e7       	ldi	r22, 0x7E	; 126
      4ea:	70 e0       	ldi	r23, 0x00	; 0
      4ec:	90 e0       	ldi	r25, 0x00	; 0
@@ -2582,10 +2577,10 @@ int main(void){
 
 
 void initUART(){
-	DDRD |= (1 << 1);
-     fa2:	51 9a       	sbi	0x0a, 1	; 10
-	DDRD &= ~ (1 << 0);
-     fa4:	50 98       	cbi	0x0a, 0	; 10
+	DDRD |= (1 << PIND0);
+     fa2:	50 9a       	sbi	0x0a, 0	; 10
+	DDRD &= ~ (1 << PIND1);
+     fa4:	51 98       	cbi	0x0a, 1	; 10
 
 	UBRR0H = ((_UBRR) & 0xF00);
      fa6:	10 92 c5 00 	sts	0x00C5, r1	; 0x8000c5 <__DATA_REGION_ORIGIN__+0x65>

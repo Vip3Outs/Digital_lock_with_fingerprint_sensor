@@ -20,7 +20,7 @@ Common symbol       size              file
 
 tmp                 0x5               FPS/fps.o
 id                  0x1               main.o
-led_pin             0x1               LCD/lcd.o
+value               0x1               LCD/lcd.o
 
 Discarded input sections
 
@@ -494,7 +494,7 @@ END GROUP
  COMMON         0x008003d4        0x5 FPS/fps.o
                 0x008003d4                tmp
  COMMON         0x008003d9        0x1 LCD/lcd.o
-                0x008003d9                led_pin
+                0x008003d9                value
  COMMON         0x008003da        0x1 main.o
                 0x008003da                id
                 0x008003db                PROVIDE (__bss_end, .)
@@ -590,31 +590,31 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x32cb
+.debug_info     0x00000000     0x32b2
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x5f4 D:/Atmel Studio 7.0/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_info    0x000005f4      0x8fb FPS/fps.o
  .debug_info    0x00000eef      0x14d I2C/i2c.o
- .debug_info    0x0000103c      0x83a LCD/lcd.o
- .debug_info    0x00001876     0x1996 main.o
- .debug_info    0x0000320c       0xbf UART/uart.o
+ .debug_info    0x0000103c      0x822 LCD/lcd.o
+ .debug_info    0x0000185e     0x1995 main.o
+ .debug_info    0x000031f3       0xbf UART/uart.o
 
-.debug_abbrev   0x00000000      0xc66
+.debug_abbrev   0x00000000      0xc57
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x5a2 D:/Atmel Studio 7.0/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_abbrev  0x000005a2      0x119 FPS/fps.o
  .debug_abbrev  0x000006bb       0xed I2C/i2c.o
- .debug_abbrev  0x000007a8      0x1e2 LCD/lcd.o
- .debug_abbrev  0x0000098a      0x24e main.o
- .debug_abbrev  0x00000bd8       0x8e UART/uart.o
+ .debug_abbrev  0x000007a8      0x1d3 LCD/lcd.o
+ .debug_abbrev  0x0000097b      0x24e main.o
+ .debug_abbrev  0x00000bc9       0x8e UART/uart.o
 
 .debug_line     0x00000000     0x125c
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x133 D:/Atmel Studio 7.0/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_line    0x00000133      0x336 FPS/fps.o
  .debug_line    0x00000469      0x13a I2C/i2c.o
- .debug_line    0x000005a3      0x2ab LCD/lcd.o
- .debug_line    0x0000084e      0x902 main.o
+ .debug_line    0x000005a3      0x2aa LCD/lcd.o
+ .debug_line    0x0000084d      0x903 main.o
  .debug_line    0x00001150      0x10c UART/uart.o
 
 .debug_frame    0x00000000      0x31c
@@ -625,26 +625,26 @@ END GROUP
  .debug_frame   0x00000210       0xc8 main.o
  .debug_frame   0x000002d8       0x44 UART/uart.o
 
-.debug_str      0x00000000      0x65d
+.debug_str      0x00000000      0x64f
  *(.debug_str)
  .debug_str     0x00000000      0x208 D:/Atmel Studio 7.0/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_str     0x00000208      0x20e FPS/fps.o
                                 0x242 (size before relaxing)
  .debug_str     0x00000416       0x69 I2C/i2c.o
                                 0x1d1 (size before relaxing)
- .debug_str     0x0000047f       0xf0 LCD/lcd.o
-                                0x271 (size before relaxing)
- .debug_str     0x0000056f       0xda main.o
+ .debug_str     0x0000047f       0xe2 LCD/lcd.o
+                                0x269 (size before relaxing)
+ .debug_str     0x00000561       0xda main.o
                                 0x340 (size before relaxing)
- .debug_str     0x00000649       0x14 UART/uart.o
+ .debug_str     0x0000063b       0x14 UART/uart.o
                                 0x190 (size before relaxing)
 
-.debug_loc      0x00000000     0x1526
+.debug_loc      0x00000000     0x14a5
  *(.debug_loc)
  .debug_loc     0x00000000      0x1fb FPS/fps.o
  .debug_loc     0x000001fb       0xb4 I2C/i2c.o
- .debug_loc     0x000002af      0x605 LCD/lcd.o
- .debug_loc     0x000008b4      0xc72 main.o
+ .debug_loc     0x000002af      0x584 LCD/lcd.o
+ .debug_loc     0x00000833      0xc72 main.o
 
 .debug_macinfo
  *(.debug_macinfo)
