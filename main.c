@@ -19,12 +19,9 @@ uint16_t getTemplateCount();
 volatile bool scanFinger = false, enrollFinger = false, removeFinger = false, doorLocked = true, mainUser = false, getID_bool = false, firstUse = false;
 uint8_t id;
 uint16_t mainUserID = 1;
-
+uint8_t buffer[3];
 int main(void){
-	/*
-	*Wstepne parametry programu
-	*/
-
+	//Wstepne parametry programu
 	lcd_init();
 	_delay_ms(50);
 	initUART();
@@ -35,7 +32,7 @@ int main(void){
 	_delay_ms(2000);
 	
 	if(getTemplateCount() == 0){
-		firstUse == true;
+		firstUse = true;
 		while(firstUse){
 			lcd_send_info("Pierwsze uzycie ", "Admin potrzebny!");
 			_delay_ms(1500);
@@ -43,7 +40,8 @@ int main(void){
 		}
 	}
 	lcd_send_info("Drzwi zamkniete", "");
-			
+	
+	//Glowna petla programu		
 	while(1){
 		if(doorLocked){
 			if(bit_is_clear(PINB, 0) && !(scanFinger)){
@@ -59,13 +57,13 @@ int main(void){
 				if(mainUser){
 					id = getID();
 					if(id == mainUserID){
-						lcd_send_info("  Niedozwolona  ", "operacja! (ADMIN)");
+						lcd_send_info("  Niedozwolona  ", "operacja!(ADMIN)");
 						_delay_ms(2000);
 						enrollFinger = false;
 						lcd_send_info("Drzwi zamkniete", "");
 					}
 					else{
-						newFinger(id);	
+						newFinger(id);
 					}
 				}
 				else{
@@ -78,8 +76,8 @@ int main(void){
 			if(bit_is_clear(PINB, 2) && !(removeFinger)){
 				removeFinger = true;
 				lcd_send_info("Wprowadz odcisk","    dla: ADMIN   ");
+				_delay_ms(1000);
 				checkFinger();
-				_delay_ms(2000);
 				if(mainUser){
 					id = getID();
 					if(id == mainUserID){
@@ -126,7 +124,7 @@ int main(void){
 		}
 	}
 	return 0;
-}
+}//Koniec main.c
 
 void newFinger(uint8_t id){
 	lcd_send_info("  Umiesc palec  ", "Skanowanie:-----");
@@ -191,6 +189,7 @@ void newFinger(uint8_t id){
 				}
 			if(tmp[0] == 0x00){
 				fps_img2TZ(2);
+				_delay_ms(500);
 				if(tmp[0] == 0x00){
 					fps_genModel();
 					if(tmp[0] == 0x00){
@@ -236,7 +235,6 @@ void newFinger(uint8_t id){
 }
 
 void deleteFinger(uint8_t id){
-	
 	fps_deleteModel(id);
 	_delay_ms(100);
 	if(tmp[0] == 0x00){
@@ -246,7 +244,7 @@ void deleteFinger(uint8_t id){
 		lcd_setCursor(0,1);
 		lcd_send_string("o ID: ");
 		lcd_setCursor(6,1);
-		lcd_send_string((char*) id);
+		lcd_send_string(itoa(id, buffer, 10));
 		_delay_ms(2000);
 		lcd_send_info("Drzwi zamkniete", "");
 	}
@@ -316,6 +314,7 @@ void checkFinger(){
 					uint16_t score;
 					score = tmp[3] << 8;
 					score += tmp[4];
+					uint8_t percentage;
 					char buffor[3];
 					lcd_clear();
 					lcd_setCursor(0,0);
@@ -323,7 +322,8 @@ void checkFinger(){
 					lcd_setCursor(0,1);
 					lcd_send_string(" Zgodnosc: ");
 					lcd_setCursor(11,1);
-					lcd_send_string(itoa(score, buffor, 10));
+					percentage = ((score <<8)/(uint8_t)255) *100;
+					lcd_send_string(itoa(percentage, buffor, 10));
 					lcd_setCursor(15,1);
 					lcd_send_string("%");
 					PORTB ^= 1 << PINB3;
@@ -374,7 +374,8 @@ uint8_t getID(){
 			else{	
 				id++;
 				lcd_setCursor(0,11);
-				lcd_send_string(itoa(id,buffor,10));	
+				lcd_send_string(itoa(id,buffor,10));
+				_delay_ms(200);	
 			}
 		}
 		else if(bit_is_clear(PINB, 2)){
@@ -385,6 +386,7 @@ uint8_t getID(){
 				lcd_send_string("Wybierz ID:");
 				lcd_setCursor(0,11);
 				lcd_send_string(itoa(id,buffor,10));
+				_delay_ms(200);
 			}
 			else if(id == 1){
 				lcd_setCursor(0,11);
@@ -394,11 +396,13 @@ uint8_t getID(){
 				id--;
 				lcd_setCursor(0,11);
 				lcd_send_string(itoa(id,buffor,10));
+				_delay_ms(200);
 			}
 		}
 		else if(bit_is_clear(PINB, 0)){
 			getID_bool = false;
 			return id;
+			_delay_ms(200);
 		}
 	}
 }
@@ -406,7 +410,7 @@ uint8_t getID(){
 uint16_t getTemplateCount(){
 	uint16_t template;
 	fps_templateNum();
-	_delay_ms(100);
+	_delay_ms(50);
 	template = tmp[1] << 8;
 	template += tmp[2];
 	return template;
