@@ -3,6 +3,7 @@
 
 
 void initUART(){
+	//?
 	DDRD |= (1 << PIND0);
 	DDRD &= ~ (1 << PIND1);
 

@@ -82,9 +82,9 @@ LCD/lcd.d \
 main.d \
 UART/uart.d
 
-OUTPUT_FILE_PATH +=arduino_bootloader.elf
+OUTPUT_FILE_PATH +=Zamek\ szyfrowy\ z\ czytnikiem\ linii\ papilarnych.elf
 
-OUTPUT_FILE_PATH_AS_ARGS +=arduino_bootloader.elf
+OUTPUT_FILE_PATH_AS_ARGS +="Zamek szyfrowy z czytnikiem linii papilarnych.elf"
 
 ADDITIONAL_DEPENDENCIES:=
 
@@ -157,13 +157,13 @@ all: $(OUTPUT_FILE_PATH) $(ADDITIONAL_DEPENDENCIES)
 $(OUTPUT_FILE_PATH): $(OBJS) $(USER_OBJS) $(OUTPUT_FILE_DEP) $(LIB_DEP) $(LINKER_SCRIPT_DEP)
 	@echo Building target: $@
 	@echo Invoking: AVR/GNU Linker : 5.4.0
-	$(QUOTE)D:\Atmel Studio 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE) -o$(OUTPUT_FILE_PATH_AS_ARGS) $(OBJS_AS_ARGS) $(USER_OBJS) $(LIBS) -Wl,-Map="arduino_bootloader.map" -Wl,--start-group -Wl,-lm  -Wl,--end-group -Wl,--gc-sections -mmcu=atmega328p -B "D:\Atmel Studio 7.0\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega328p"  
+	$(QUOTE)D:\Atmel Studio 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE) -o$(OUTPUT_FILE_PATH_AS_ARGS) $(OBJS_AS_ARGS) $(USER_OBJS) $(LIBS) -Wl,-Map="Zamek szyfrowy z czytnikiem linii papilarnych.map" -Wl,--start-group -Wl,-lm  -Wl,--end-group -Wl,--gc-sections -mmcu=atmega328p -B "D:\Atmel Studio 7.0\7.0\Packs\atmel\ATmega_DFP\1.3.300\gcc\dev\atmega328p"  
 	@echo Finished building target: $@
-	"D:\Atmel Studio 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-objcopy.exe" -O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures  "arduino_bootloader.elf" "arduino_bootloader.hex"
-	"D:\Atmel Studio 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-objcopy.exe" -j .eeprom  --set-section-flags=.eeprom=alloc,load --change-section-lma .eeprom=0  --no-change-warnings -O ihex "arduino_bootloader.elf" "arduino_bootloader.eep" || exit 0
-	"D:\Atmel Studio 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-objdump.exe" -h -S "arduino_bootloader.elf" > "arduino_bootloader.lss"
-	"D:\Atmel Studio 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-objcopy.exe" -O srec -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures "arduino_bootloader.elf" "arduino_bootloader.srec"
-	"D:\Atmel Studio 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-size.exe" "arduino_bootloader.elf"
+	"D:\Atmel Studio 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-objcopy.exe" -O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures  "Zamek szyfrowy z czytnikiem linii papilarnych.elf" "Zamek szyfrowy z czytnikiem linii papilarnych.hex"
+	"D:\Atmel Studio 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-objcopy.exe" -j .eeprom  --set-section-flags=.eeprom=alloc,load --change-section-lma .eeprom=0  --no-change-warnings -O ihex "Zamek szyfrowy z czytnikiem linii papilarnych.elf" "Zamek szyfrowy z czytnikiem linii papilarnych.eep" || exit 0
+	"D:\Atmel Studio 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-objdump.exe" -h -S "Zamek szyfrowy z czytnikiem linii papilarnych.elf" > "Zamek szyfrowy z czytnikiem linii papilarnych.lss"
+	"D:\Atmel Studio 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-objcopy.exe" -O srec -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures "Zamek szyfrowy z czytnikiem linii papilarnych.elf" "Zamek szyfrowy z czytnikiem linii papilarnych.srec"
+	"D:\Atmel Studio 7.0\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-size.exe" "Zamek szyfrowy z czytnikiem linii papilarnych.elf"
 	
 	
 
@@ -175,5 +175,5 @@ $(OUTPUT_FILE_PATH): $(OBJS) $(USER_OBJS) $(OUTPUT_FILE_DEP) $(LIB_DEP) $(LINKER
 clean:
 	-$(RM) $(OBJS_AS_ARGS) $(EXECUTABLES)  
 	-$(RM) $(C_DEPS_AS_ARGS)   
-	rm -rf "arduino_bootloader.elf" "arduino_bootloader.a" "arduino_bootloader.hex" "arduino_bootloader.lss" "arduino_bootloader.eep" "arduino_bootloader.map" "arduino_bootloader.srec" "arduino_bootloader.usersignatures"
+	rm -rf "Zamek szyfrowy z czytnikiem linii papilarnych.elf" "Zamek szyfrowy z czytnikiem linii papilarnych.a" "Zamek szyfrowy z czytnikiem linii papilarnych.hex" "Zamek szyfrowy z czytnikiem linii papilarnych.lss" "Zamek szyfrowy z czytnikiem linii papilarnych.eep" "Zamek szyfrowy z czytnikiem linii papilarnych.map" "Zamek szyfrowy z czytnikiem linii papilarnych.srec" "Zamek szyfrowy z czytnikiem linii papilarnych.usersignatures"
 	

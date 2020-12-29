@@ -92,7 +92,7 @@ int main(void){
 								_delay_ms(200);
 								break;
 							}
-							else if(bit_is_clear(PINB, 2)){
+							else if(bit_is_clear(PINB, 1)){
 								newFinger(mainUserID);
 								mainUser = false;
 								lcd_send_info("Drzwi zamkniete", "");
@@ -117,14 +117,14 @@ int main(void){
 		else if(!doorLocked){
 			if(bit_is_clear(PINB, 0)){
 				doorLocked = true;
-				PORTB ^= 1 << PINB3;
+				PORTB &= ~(1 << PINB3);
 				lcd_send_info("Drzwi zamkniete", "");
 				_delay_ms(1000);
 			}
 		}
 	}
 	return 0;
-}//Koniec main.c
+}//Koniec void main()
 
 void newFinger(uint8_t id){
 	lcd_send_info("  Umiesc palec  ", "Skanowanie:-----");
@@ -322,11 +322,11 @@ void checkFinger(){
 					lcd_setCursor(0,1);
 					lcd_send_string(" Zgodnosc: ");
 					lcd_setCursor(11,1);
-					percentage = ((score <<8)/(uint8_t)255) *100;
+					percentage = ceil(((float)score/255) *100);
 					lcd_send_string(itoa(percentage, buffor, 10));
 					lcd_setCursor(15,1);
 					lcd_send_string("%");
-					PORTB ^= 1 << PINB3;
+					PORTB |= (1 << PINB3);
 					_delay_ms(3000);
 					lcd_send_info("--Drzwi otwarte--", "");
 					scanFinger = false;

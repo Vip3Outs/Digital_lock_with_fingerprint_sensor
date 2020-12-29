@@ -13,7 +13,7 @@
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
     <AssemblyName>arduino_bootloader</AssemblyName>
-    <Name>arduino_bootloader</Name>
+    <Name>Zamek szyfrowy z czytnikiem linii papilarnych</Name>
     <RootNamespace>arduino_bootloader</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>

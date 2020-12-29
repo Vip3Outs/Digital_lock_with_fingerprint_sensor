@@ -10,8 +10,8 @@
 #define RX_BUFF			10
 
 //uzyteczne makra
-#define TX_START()		UCSR0B |= _BV(TXEN0)	//enable TX
-#define RX_START()		UCSR0B |= _BV(RXEN0)	//enable RX
+#define TX_START()		UCSR0B |= _BV(TXEN0)	//wlaczenie TX
+#define RX_START()		UCSR0B |= _BV(RXEN0)	//wlaczenie RX
 
 
 void initUART();
