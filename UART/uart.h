@@ -5,18 +5,11 @@
 #include <stdint.h>
 //wstepna konfiguracja
 #define F_CPU			16000000				//taktowanie procesora
-#define _BAUD			57600					//baud rate
-#define _UBRR			(F_CPU/16)/_BAUD - 1	//ustawienia dla UBRRH i UBRRL
-#define RX_BUFF			10
+#define BAUD			57600					//baud rate
+#define UBRR			(F_CPU/16)/BAUD - 1		//ustawienia dla UBRRH i UBRRL
 
-//uzyteczne makra
-#define TX_START()		UCSR0B |= _BV(TXEN0)	//wlaczenie TX
-#define RX_START()		UCSR0B |= _BV(RXEN0)	//wlaczenie RX
-
-
-void initUART();
-uint8_t getByte();
-void putByte(uint8_t data);
-
+void uart_init();
+uint8_t uart_getByte();
+void uart_putByte(uint8_t data);
 
 #endif /* __UART_H___ */

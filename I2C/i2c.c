@@ -20,7 +20,7 @@ void i2c_send_byte(unsigned char byte){
     while ((TWCR & (1 << TWINT)) == 0);
 }
 
-void i2c_send_packet(unsigned char value, unsigned char address) {
+void i2c_send_packet(unsigned char value, unsigned char address){
 	i2c_start_condition();
 	i2c_send_byte(address);
 	i2c_send_byte(value);

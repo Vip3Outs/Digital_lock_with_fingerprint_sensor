@@ -35,14 +35,14 @@ void lcd_init(){
 	_delay_ms(1);				
 	lcd_transmit_header(0b00000010);
 	_delay_ms(1);			
-	lcd_send_byte(0b00101000);			//rozmiar 16x2 i 5x8dot (0x28)	
+	lcd_send_byte(0b00101000);	//rozmiar 16x2 i 5x8dot (0x28)	
 	_delay_ms(1);
-	lcd_send_byte(0b00001100);			//wylaczenie kursora i miganie kursora (0x0C)
+	lcd_send_byte(0b00001100);	//wylaczenie kursora i miganie kursora (0x0C)
 	_delay_ms(1);
-	lcd_send_byte(0b00000110);			//autoinkrementacja kursora (0x06)
+	lcd_send_byte(0b00000110);	//autoinkrementacja kursora (0x06)
 	_delay_ms(1);
 	i2c_send_packet(value |= 0x08, SLAVE_WRITE_ADDRESS);	//podswietlenie (backlight)
-	i2c_send_packet(value &=~ 0x02, SLAVE_WRITE_ADDRESS);
+	i2c_send_packet(value &=~ 0x02, SLAVE_WRITE_ADDRESS);	
 }
 
 void lcd_clear(){
@@ -68,4 +68,18 @@ void lcd_send_info(const char *line1, const char *line2){
 	lcd_send_string(line1);
 	lcd_setCursor(0,1);
 	lcd_send_string(line2);
+}
+
+void lcd_special_char(char col, char row, uint8_t num){
+	lcd_setCursor(col, row);
+	lcd_send_char(num);
+}
+
+void lcd_custom_char(unsigned char location, unsigned char *msg)
+{
+		lcd_send_byte(0x40 + (location*8));
+		for(uint8_t i = 0; i < 8; i++){	
+		lcd_send_char(msg[i]);
+		}
+
 }
